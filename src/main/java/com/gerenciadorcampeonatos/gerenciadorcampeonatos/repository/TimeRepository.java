@@ -2,7 +2,8 @@
 
 package com.gerenciadorcampeonatos.repository;
 
-import com.gerenciadorcampeonatos.gerenciadorcampeonatos.model.Time;
+// CORRIGIDO: Removida a duplicação "gerenciadorcampeonatos" do import
+import com.gerenciadorcampeonatos.model.Time;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
