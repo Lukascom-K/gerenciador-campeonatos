@@ -31,3 +31,16 @@ build/
 
 ### VS Code ###
 .vscode/
+"# Compilados" 
+"*.class" 
+"target/" 
+"/bin/" 
+"" 
+"# IDEs" 
+".idea/" 
+"*.iml" 
+"*.ipr" 
+"*.iws" 
+"" 
+"# SO" 
+".DS_Store" 
