@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Campeonatos - Teste CRUD</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9; }
+        h2 { color: #333; }
+        .container { max-width: 900px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        input[type="text"], input[type="number"], input[type="date"] { width: 100%; padding: 10px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #5cb85c; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; float: right; margin-left: 10px; }
+        button:hover { background-color: #4cae4c; }
+        #resultados { margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px; }
+        .campeonato-item { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 4px; overflow: auto; }
+        .campeonato-item span { display: block; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Teste de CRUD - Campeonato</h1>
+    <p>A aplicação Spring Boot deve estar rodando em <strong style="color: #d9534f;">http://localhost:8080/</strong> (Verifique se não há erros de `ClassNotFoundException` no console do IntelliJ).</p>
+
+    <h2>1. Criar Novo Campeonato</h2>
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" placeholder="Ex: Copa Teste 2026">
+
+    <label for="ano">Ano:</label>
+    <input type="number" id="ano" placeholder="Ex: 2026">
+
+    <label for="dataInicio">Data de Início:</label>
+    <input type="date" id="dataInicio">
+
+    <label for="status">Status:</label>
+    <input type="text" id="status" value="ATIVO" readonly>
+
+    <button onclick="criarCampeonato()">Criar Campeonato</button>
+    <div style="clear: both;"></div>
+
+    <hr style="margin: 30px 0;">
+
+    <h2>2. Listar Todos os Campeonatos</h2>
+    <button onclick="listarCampeonatos()" style="background-color: #0275d8;">Listar / Atualizar</button>
+    <div style="clear: both;"></div>
+
+    <div id="resultados">
+    </div>
+</div>
+
+<script>
+    // A URL deve ser ajustada para a porta real do Spring Boot (8080)
+    const API_URL = 'http://localhost:8080/api/campeonatos';
+
+    // Função para CRIAR (POST)
+    async function criarCampeonato() {
+        const nome = document.getElementById('nome').value;
+        const ano = document.getElementById('ano').value;
+        const status = document.getElementById('status').value;
+        const dataInicio = document.getElementById('dataInicio').value; // Novo campo
+
+        if (!nome || !ano || !dataInicio) {
+            alert('Nome, Ano e Data de Início são obrigatórios!');
+            return;
+        }
+
+        const campeonato = {
+            nome: nome,
+            ano: parseInt(ano),
+            status: status,
+            dataInicio: dataInicio + 'T00:00:00' // Formato ISO 8601 (YYYY-MM-DDT00:00:00)
+        };
+
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(campeonato)
+            });
+
+            if (response.status === 201) {
+                alert('Campeonato criado com sucesso!');
+                listarCampeonatos(); // Atualiza a lista
+            } else {
+                const error = await response.json();
+                // Melhor tratamento para erros 400 (Bad Request/Validação)
+                const errorMessage = error.errors ? error.errors.map(e => e.defaultMessage).join(', ') : error.message || response.statusText;
+                alert(`Erro ao criar campeonato (Status ${response.status}): ${errorMessage}`);
+            }
+        } catch (error) {
+            alert('Erro de conexão com a API. Certifique-se de que o Spring Boot está rodando.');
+            console.error('Fetch error:', error);
+        }
+    }
+
+    // Função para DELETAR (DELETE)
+    async function deletarCampeonato(id) {
+        if (!confirm(`Tem certeza que deseja deletar o Campeonato ID: ${id}?`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.status === 204) {
+                alert(`Campeonato ID ${id} deletado com sucesso (204 No Content)!`);
+                listarCampeonatos(); // Atualiza a lista
+            } else if (response.status === 404) {
+                alert(`Erro: Campeonato ID ${id} não encontrado.`);
+            } else {
+                alert(`Erro ao deletar: ${response.statusText}`);
+            }
+        } catch (error) {
+            alert('Erro de conexão com a API.');
+        }
+    }
+
+    // Função para LISTAR (GET ALL)
+    async function listarCampeonatos() {
+        const resultadosDiv = document.getElementById('resultados');
+        resultadosDiv.innerHTML = 'Carregando...';
+
+        try {
+            const response = await fetch(API_URL);
+
+            // Verifica se a resposta foi bem-sucedida (ex: 200 OK)
+            if (!response.ok) {
+                 throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
+            }
+
+            const campeonatos = await response.json();
+
+            resultadosDiv.innerHTML = '';
+            if (campeonatos.length === 0) {
+                resultadosDiv.innerHTML = '<p>Nenhum campeonato encontrado.</p>';
+                return;
+            }
+
+            campeonatos.forEach(camp => {
+                const item = document.createElement('div');
+                item.className = 'campeonato-item';
+                // Adicionado verificação de dataInicio, pois pode ser nulo se o campo não existir no DB
+                const dataDisplay = camp.dataInicio ? new Date(camp.dataInicio).toLocaleDateString('pt-BR') : 'N/A';
+
+                item.innerHTML = `
+                    <span><strong>ID:</strong> ${camp.id || 'N/A'}</span>
+                    <span><strong>Nome:</strong> ${camp.nome || 'N/A'}</span>
+                    <span><strong>Ano:</strong> ${camp.ano || 'N/A'}</span>
+                    <span><strong>Data Início:</strong> ${dataDisplay}</span>
+                    <span><strong>Status:</strong> ${camp.status || 'N/A'}</span>
+                    <button onclick="deletarCampeonato(${camp.id})" style="background-color: #d9534f; float: right;">Deletar</button>
+                `;
+                resultadosDiv.appendChild(item);
+            });
+
+        } catch (error) {
+            resultadosDiv.innerHTML = `<p style="color: red;">Erro ao carregar dados: ${error.message || 'Verifique se a API está rodando em http://localhost:8080/api/campeonatos'}</p>`;
+            console.error('Erro ao listar:', error);
+        }
+    }
+
+    // Lista os campeonatos automaticamente ao carregar a página
+    window.onload = listarCampeonatos;
+</script>
+</body>
+</html>

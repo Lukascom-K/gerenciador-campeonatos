@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "*") // <--- ESTA É A CORREÇÃO FINAL PARA O CORS
 @RestController // Marca a classe como um Controller REST
 @RequestMapping("/api/campeonatos") // Define o caminho base da API
 public class CampeonatoController {
