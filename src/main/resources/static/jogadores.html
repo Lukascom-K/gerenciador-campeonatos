@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Jogadores</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+<header class="bg-blue-600 text-white p-4 text-xl font-bold text-center shadow">Gerenciar Jogadores</header>
+<main class="max-w-5xl mx-auto mt-6">
+    <section class="bg-white shadow p-6 rounded-lg mb-8">
+        <h2 class="text-xl font-semibold mb-4">Cadastrar / Editar Jogador</h2>
+        <form id="formJogador" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label class="block font-medium">Nome</label>
+                <input id="nome" class="w-full border px-3 py-2 rounded" required>
+            </div>
+            <div>
+                <label class="block font-medium">Número da Camisa</label>
+                <input id="numeroCamisa" type="number" class="w-full border px-3 py-2 rounded">
+            </div>
+            <div>
+                <label class="block font-medium">Time (ID)</label>
+                <input id="timeId" type="number" class="w-full border px-3 py-2 rounded" placeholder="Informe o id do time">
+            </div>
+            <input type="hidden" id="jogadorId">
+            <button type="submit" class="col-span-full bg-blue-600 text-white py-2 mt-2 rounded hover:bg-blue-700">Salvar</button>
+        </form>
+    </section>
+
+    <section class="bg-white shadow p-6 rounded-lg">
+        <h2 class="text-xl font-semibold mb-4">Lista de Jogadores</h2>
+        <table class="w-full border">
+            <thead class="bg-gray-200">
+            <tr>
+                <th class="p-2 border">ID</th>
+                <th class="p-2 border">Nome</th>
+                <th class="p-2 border">Número</th>
+                <th class="p-2 border">Time (ID)</th>
+                <th class="p-2 border">Ações</th>
+            </tr>
+            </thead>
+            <tbody id="tabelaJogadores"></tbody>
+        </table>
+    </section>
+</main>
+<script src="js/jogadores.js"></script>
+</body>
+</html>

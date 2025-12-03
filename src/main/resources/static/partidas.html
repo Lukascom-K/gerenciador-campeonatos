@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Partidas</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+<header class="bg-blue-600 text-white p-4 text-xl font-bold text-center shadow">Gerenciar Partidas</header>
+<main class="max-w-5xl mx-auto mt-6">
+    <section class="bg-white shadow p-6 rounded-lg mb-8">
+        <h2 class="text-xl font-semibold mb-4">Cadastrar / Editar Partida</h2>
+        <form id="formPartida" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label class="block font-medium">Data e Hora</label>
+                <input id="dataPartida" type="datetime-local" class="w-full border px-3 py-2 rounded">
+            </div>
+            <div>
+                <label class="block font-medium">Fase (ID)</label>
+                <input id="faseId" type="number" class="w-full border px-3 py-2 rounded">
+            </div>
+            <div>
+                <label class="block font-medium">Time Casa (ID)</label>
+                <input id="timeCasaId" type="number" class="w-full border px-3 py-2 rounded">
+            </div>
+            <div>
+                <label class="block font-medium">Time Visitante (ID)</label>
+                <input id="timeVisitanteId" type="number" class="w-full border px-3 py-2 rounded">
+            </div>
+            <input type="hidden" id="partidaId">
+            <button type="submit" class="col-span-full bg-blue-600 text-white py-2 mt-2 rounded hover:bg-blue-700">Salvar</button>
+        </form>
+    </section>
+
+    <section class="bg-white shadow p-6 rounded-lg">
+        <h2 class="text-xl font-semibold mb-4">Lista de Partidas</h2>
+        <table class="w-full border">
+            <thead class="bg-gray-200">
+            <tr>
+                <th class="p-2 border">ID</th>
+                <th class="p-2 border">Data/Hora</th>
+                <th class="p-2 border">Fase (ID)</th>
+                <th class="p-2 border">Casa (ID)</th>
+                <th class="p-2 border">Visitante (ID)</th>
+                <th class="p-2 border">Ações</th>
+            </tr>
+            </thead>
+            <tbody id="tabelaPartidas"></tbody>
+        </table>
+    </section>
+</main>
+<script src="js/partidas.js"></script>
+</body>
+</html>
