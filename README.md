@@ -1,148 +1,123 @@
-Gerenciador de Campeonatos – API REST com Spring Boot
+# Gerenciador de Campeonatos – Sistema Completo (Spring Boot + HTML/JS)
 
-Este projeto consiste em uma aplicação completa para gerenciamento de campeonatos esportivos, incluindo entidades como campeonatos, times, jogadores, técnicos, fases, partidas, inscrições e estatísticas.
-A API foi construída seguindo boas práticas de arquitetura, camada de serviço, repositórios JPA, validação com Bean Validation e comunicação REST.
+Aplicação completa para gerenciamento de campeonatos esportivos com CRUD de Campeonatos, Times, Jogadores, Técnicos, Fases, Partidas, Inscrições e Estatísticas.  
+Backend desenvolvido em Spring Boot e frontend construído em HTML, CSS e JavaScript (Fetch API).
 
-A aplicação inclui também um front-end simples desenvolvido com HTML, CSS e JavaScript, permitindo interação direta com os endpoints.
+---
 
-Descrição Geral do Projeto
+## Tecnologias Utilizadas
 
-O sistema permite o gerenciamento das seguintes entidades:
+### Backend
+- Java 17+
+- Spring Boot
+- Spring Web
+- Spring Data JPA
+- MySQL
+- Maven
+- Lombok
+- Jakarta Validation
 
-Campeonatos
-
-Times
-
-Jogadores
-
-Técnicos
-
-Fases
-
-Partidas
-
-Inscrições
-
-Estatísticas
-
-Cada entidade possui operações completas de CRUD expostas através de uma API RESTful, seguindo o padrão /api/v1.
-
-A persistência é feita em banco MySQL utilizando Spring Data JPA.
-Foi implementado tratamento global de exceções e validações de campos obrigatórios.
-
-O front-end acessa diretamente os endpoints através de requisições AJAX usando Fetch API.
-
-Tecnologias Utilizadas
-
-Java 17
-
-Spring Boot
-
-Spring MVC
-
-Spring Data JPA
-
-MySQL
-
-Hibernate
-
-Lombok
-
-Jakarta Validation
-
-Maven
-
-HTML, CSS e JavaScript (Fetch API)
-
-Como Executar o Projeto
-Clonar o repositório
-git clone https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git
-cd SEU_REPOSITORIO
-
-Configurar o banco de dados
-
-Crie um banco com o nome:
-
-gerenciador
+### Frontend
+- HTML5
+- CSS3
+- JavaScript (Fetch API)
 
 
-Agora cole o script SQL completo (pronto para uso) no phpMyAdmin, DBeaver ou MySQL CLI.
+---
 
-Script SQL Completo – Banco 100% Pronto
-CREATE DATABASE IF NOT EXISTS gerenciador;
-USE gerenciador;
+## Funcionalidades
 
-CREATE TABLE campeonatos (
-id BIGINT PRIMARY KEY AUTO_INCREMENT,
-nome VARCHAR(100) NOT NULL,
-ano INT,
-status VARCHAR(50),
-data_inicio DATE
-);
+### Campeonatos
+- Criar campeonato
+- Editar
+- Listar
+- Excluir
 
-CREATE TABLE times (
-id BIGINT PRIMARY KEY AUTO_INCREMENT,
-nome VARCHAR(100) NOT NULL,
-cidade VARCHAR(100)
-);
+### Times
+- CRUD completo
+- Relacionamento com jogadores
+- Relacionamento com técnico
 
-CREATE TABLE jogadores (
-id BIGINT PRIMARY KEY AUTO_INCREMENT,
-nome VARCHAR(100) NOT NULL,
-idade INT,
-posicao VARCHAR(50),
-time_id BIGINT,
-FOREIGN KEY (time_id) REFERENCES times(id)
-);
+### Jogadores
+- CRUD completo
+- Vinculados a um time
 
-CREATE TABLE tecnicos (
-id BIGINT PRIMARY KEY AUTO_INCREMENT,
-nome VARCHAR(100) NOT NULL,
-experiencia INT,
-time_id BIGINT UNIQUE,
-FOREIGN KEY (time_id) REFERENCES times(id)
-);
+### Técnicos
+- CRUD completo
+- Relacionamento 1–1 com Time
 
-CREATE TABLE fases (
-id BIGINT PRIMARY KEY AUTO_INCREMENT,
-nome VARCHAR(100),
-campeonato_id BIGINT,
-FOREIGN KEY (campeonato_id) REFERENCES campeonatos(id)
-);
+### Fases
+- Relacionadas a campeonatos
+- CRUD completo
 
-CREATE TABLE partidas (
-id BIGINT PRIMARY KEY AUTO_INCREMENT,
-data_partida DATE,
-local_partida VARCHAR(200),
-time_casa_id BIGINT,
-time_fora_id BIGINT,
-campeonato_id BIGINT,
-fase_id BIGINT,
-FOREIGN KEY (time_casa_id) REFERENCES times(id),
-FOREIGN KEY (time_fora_id) REFERENCES times(id),
-FOREIGN KEY (campeonato_id) REFERENCES campeonatos(id),
-FOREIGN KEY (fase_id) REFERENCES fases(id)
-);
+### Partidas
+- Time da casa e visitante
+- Registro de placar
+- Relacionamento com fase
 
-CREATE TABLE inscricoes (
-id BIGINT PRIMARY KEY AUTO_INCREMENT,
-jogador_id BIGINT,
-campeonato_id BIGINT,
-data_inscricao DATE,
-FOREIGN KEY (jogador_id) REFERENCES jogadores(id),
-FOREIGN KEY (campeonato_id) REFERENCES campeonatos(id)
-);
+### Inscrições
+- Inscrição de times em campeonatos
+- CRUD completo
 
-CREATE TABLE estatisticas (
-id BIGINT PRIMARY KEY AUTO_INCREMENT,
-gols INT,
-assistencias INT,
-faltas INT,
-jogador_id BIGINT,
-FOREIGN KEY (jogador_id) REFERENCES jogadores(id)
-);
+### Estatísticas
+- Vinculadas a jogador e partida
+- CRUD completo
 
-Configuração do application.properties
+---
+
+## Como rodar o Backend
+
+### Via IntelliJ IDEA
+Abra o projeto e execute:
+
+GerenciadorCampeonatosApplication
+
+
+### Via Maven
+
+
+mvn spring-boot:run
+
+
+Backend disponível em:
+
+
+http://localhost:8080
+
+
+---
+
+## Como rodar o Frontend
+
+O frontend está em `src/main/resources/static/`.
+
+Acesse pelo navegador:
+
+
+
+http://localhost:8080/campeonatos.html
+
+http://localhost:8080/times.html
+
+http://localhost:8080/jogadores.html
+
+http://localhost:8080/fases.html
+
+http://localhost:8080/partidas.html
+
+http://localhost:8080/inscricoes.html
+
+http://localhost:8080/estatisticas.html
+
+
+---
+
+## Configuração do Banco de Dados
+
+Arquivo `application.properties`:
+
+
+
 spring.datasource.url=jdbc:mysql://localhost:3306/gerenciador?useSSL=false&serverTimezone=UTC
 spring.datasource.username=root
 spring.datasource.password=
@@ -151,164 +126,161 @@ spring.jpa.hibernate.ddl-auto=none
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 
-Executar o projeto
 
-Via IntelliJ (botão Run) ou via terminal:
+---
 
-mvn spring-boot:run
+## Script SQL Completo
 
+```sql
+CREATE DATABASE IF NOT EXISTS gerenciador;
+USE gerenciador;
 
-A API estará disponível em:
+CREATE TABLE campeonatos (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    ano INT,
+    status VARCHAR(50),
+    data_inicio DATE
+);
 
-http://localhost:8080/api/v1
+CREATE TABLE times (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    cidade VARCHAR(100)
+);
 
+CREATE TABLE jogadores (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    numero_camisa INT,
+    time_id BIGINT,
+    FOREIGN KEY (time_id) REFERENCES times(id)
+);
 
-E o front-end poderá ser acessado diretamente via arquivos HTML em:
+CREATE TABLE tecnicos (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    idade INT,
+    time_id BIGINT UNIQUE,
+    FOREIGN KEY (time_id) REFERENCES times(id)
+);
 
-src/main/resources/static/
+CREATE TABLE fases (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100),
+    campeonato_id BIGINT,
+    FOREIGN KEY (campeonato_id) REFERENCES campeonatos(id)
+);
+
+CREATE TABLE partidas (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    data_partida DATETIME,
+    fase_id BIGINT,
+    time_casa_id BIGINT,
+    time_visitante_id BIGINT,
+    gols_casa INT,
+    gols_visitante INT,
+    FOREIGN KEY (fase_id) REFERENCES fases(id),
+    FOREIGN KEY (time_casa_id) REFERENCES times(id),
+    FOREIGN KEY (time_visitante_id) REFERENCES times(id)
+);
+
+CREATE TABLE inscricoes (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    data_inscricao DATE,
+    campeonato_id BIGINT,
+    time_id BIGINT,
+    FOREIGN KEY (campeonato_id) REFERENCES campeonatos(id),
+    FOREIGN KEY (time_id) REFERENCES times(id)
+);
+
+CREATE TABLE estatisticas (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    tipo VARCHAR(100),
+    valor INT,
+    jogador_id BIGINT,
+    partida_id BIGINT,
+    FOREIGN KEY (jogador_id) REFERENCES jogadores(id),
+    FOREIGN KEY (partida_id) REFERENCES partidas(id)
+);
 
 Endpoints da API
-
-A API segue o padrão:
-
-/api/v1/{entidade}
-
-
-Exemplos:
-
 Campeonatos
-
-GET /api/v1/campeonatos
-
-POST /api/v1/campeonatos
-
-GET /api/v1/campeonatos/{id}
-
-PUT /api/v1/campeonatos/{id}
-
-DELETE /api/v1/campeonatos/{id}
-
+Método	Endpoint
+GET	/api/v1/campeonatos
+GET	/api/v1/campeonatos/{id}
+POST	/api/v1/campeonatos
+PUT	/api/v1/campeonatos/{id}
+DELETE	/api/v1/campeonatos/{id}
 Times
-
-GET /api/v1/times
-
-POST /api/v1/times
-
+Método	Endpoint
+GET	/api/v1/times
+POST	/api/v1/times
+GET	/api/v1/times/{id}
+PUT	/api/v1/times/{id}
+DELETE	/api/v1/times/{id}
 Jogadores
-
-GET /api/v1/jogadores
-
-POST /api/v1/jogadores
-
+Método	Endpoint
+GET	/api/v1/jogadores
+POST	/api/v1/jogadores
+PUT	/api/v1/jogadores/{id}
+DELETE	/api/v1/jogadores/{id}
 Técnicos
-
-GET /api/v1/tecnicos
-
-POST /api/v1/tecnicos
-
+Método	Endpoint
+GET	/api/v1/tecnicos
+POST	/api/v1/tecnicos
+PUT	/api/v1/tecnicos/{id}
+DELETE	/api/v1/tecnicos/{id}
 Fases
-
-GET /api/v1/fases
-
-POST /api/v1/fases
-
+Método	Endpoint
+GET	/api/v1/fases
+POST	/api/v1/fases
+PUT	/api/v1/fases/{id}
+DELETE	/api/v1/fases/{id}
 Partidas
-
-GET /api/v1/partidas
-
-POST /api/v1/partidas
-
+Método	Endpoint
+GET	/api/v1/partidas
+POST	/api/v1/partidas
+PUT	/api/v1/partidas/{id}
+DELETE	/api/v1/partidas/{id}
 Inscrições
-
-GET /api/v1/inscricoes
-
-POST /api/v1/inscricoes
-
+Método	Endpoint
+GET	/api/v1/inscricoes
+POST	/api/v1/inscricoes
+PUT	/api/v1/inscricoes/{id}
+DELETE	/api/v1/inscricoes/{id}
 Estatísticas
-
-GET /api/v1/estatisticas
-
-POST /api/v1/estatisticas
-
-Testes recomendados (Postman / Insomnia)
+Método	Endpoint
+GET	/api/v1/estatisticas
+POST	/api/v1/estatisticas
+PUT	/api/v1/estatisticas/{id}
+DELETE	/api/v1/estatisticas/{id}
+Testes via Postman
 Criar Campeonato
-
-POST /api/v1/campeonatos
-
 {
-"nome": "Campeonato Teste",
-"ano": 2025,
-"status": "Ativo",
-"dataInicio": "2025-01-01"
+  "nome": "Campeonato Teste",
+  "ano": 2025,
+  "status": "Ativo",
+  "dataInicio": "2025-01-01"
 }
 
 Criar Time
-
-POST /api/v1/times
-
 {
-"nome": "Time Azul",
-"cidade": "Curitiba"
+  "nome": "Time Azul",
+  "cidade": "Curitiba"
 }
 
 Criar Jogador
-
-POST /api/v1/jogadores
-
 {
-"nome": "Carlos Silva",
-"idade": 22,
-"posicao": "Atacante",
-"time": { "id": 1 }
+  "nome": "Carlos Silva",
+  "numeroCamisa": 10,
+  "time": { "id": 1 }
 }
 
 Criar Estatística
-
-POST /api/v1/estatisticas
-
 {
-"gols": 2,
-"assistencias": 1,
-"faltas": 0,
-"jogador": { "id": 1 }
+  "tipo": "Gols",
+  "valor": 2,
+  "jogador": { "id": 1 },
+  "partida": { "id": 1 }
 }
-
-Sobre o Front-End
-
-Todos os arquivos HTML, CSS e JavaScript estão em:
-
-src/main/resources/static/
-
-
-Cada página possui um JS próprio que realiza chamadas à API usando Fetch API.
-O front permite:
-
-Listar registros
-
-Cadastrar
-
-Editar
-
-Excluir
-
-Considerações Finais
-
-Este projeto atende aos requisitos solicitados na disciplina, incluindo:
-
-API REST completa
-
-Camada Controller, Service e Repository
-
-Persistência em MySQL
-
-Validações
-
-Tratamento global de erros
-
-Documentação
-
-Versionamento
-
-Testes
-
-Front integrado com o backend
